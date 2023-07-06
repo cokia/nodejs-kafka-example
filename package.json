@@ -1,16 +1,14 @@
 {
-  "name": "nodejs-sqs-example",
+  "name": "nodejs-kafka-example",
   "version": "1.0.0",
   "main": "app.ts",
-  "repository": "https://github.com/cokia/nodejs-sqs-example",
+  "repository": "https://github.com/cokia/nodejs-kafka-example",
   "author": "cokia <hanu@hanukoon.com>",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.1267.0",
     "dotenv": "^16.0.3",
+    "kafkajs": "^2.2.4",
     "nodejs": "^0.0.0",
-    "sqs-consumer": "^5.7.0",
-    "sqs-producer": "^2.1.0",
     "typescript": "^4.9.3"
   },
   "scripts": {
