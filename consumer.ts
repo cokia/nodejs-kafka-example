@@ -1,41 +1,22 @@
-import { Consumer } from 'sqs-consumer';
-import AWS from 'aws-sdk';
-import config from './config'
+import { Kafka } from "kafkajs";
+import config from "./config";
 
-AWS.config.update({
-  region: config.region,
-  accessKeyId: config.accessKeyId,
-  secretAccessKey: config.secretAccessKey
+const kafka = new Kafka({
+  clientId: config.clientId,
+  brokers: config.brokers.split(","),
 });
 
-function timestamp() {
-  var today = new Date();
-  today.setHours(today.getHours() + 9);
-  return today.toISOString().replace('T', ' ').substring(0, 19);
+const consumer = kafka.consumer({ groupId: config.groupId });
+
+const initKafkaConsumer = async () => {
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'topic', fromBeginning: true });
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      console.log(`[KafkaConsumer] Topic: ${topic}, Partition: ${partition}, Offset: ${message.offset}, Message: ${message.value.toString()}`);
+    }
+  })
 }
 
-const app = Consumer.create({
-  queueUrl: config.queueUrl,
-  region: config.region,
-  handleMessage: async (message: { MessageId: string, ReceiptHandle: string, Body: string }) => {
-    console.log(`[${timestamp()}] {${message.MessageId}} ${message.Body} is received!`)
-    // Super Awesome Messaging handling logic 🚀
-    console.log(`[${timestamp()}] {${message.MessageId}} is destroyed!`)
+initKafkaConsumer();
 
-  },
-  sqs: new AWS.SQS()
-});
-
-app.on('error', (err) => {
-  console.error(err.message);
-});
-
-app.on('processing_error', (err) => {
-  console.error(err.message);
-});
-
-app.on('timeout_error', (err) => {
-  console.error(err.message);
-});
-
-app.start();

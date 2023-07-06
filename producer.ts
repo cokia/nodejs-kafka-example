@@ -31,3 +31,5 @@ const sendMessage = async (topic: string, message: string) => {
 
 initKafkaConnection();
 
+sendMessage('topic', 'message');
+

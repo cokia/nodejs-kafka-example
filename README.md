@@ -1,5 +1,5 @@
-# nodejs-sqs-example
-aws-sqs example with sqs-producer
+# nodejs-kafka eample
+kafka api example with kafkajs
 
 ## Run scripts
   ### Install dependencies
@@ -8,12 +8,11 @@ aws-sqs example with sqs-producer
   ```
   ### Run producer
   1. Create a .env file in the root directory and add the following variables (example at .env.example)
-  * aws_access_key_id
-  * aws_secret_access_key
-  * region
-  * queue_url
+  *   clientId
+  *   brokers
+  *   groupId
 
-  2. edit producer.ts according to the type of queue you are using. (FIFO / Standard)
+  2. edit producer.ts to add topic name and message body
 
   3. Run producer
 
@@ -22,47 +21,16 @@ aws-sqs example with sqs-producer
   ```
   ### Run consumer
   1. Create a .env file in the root directory and add the following variables (example at .env.example)
-  * aws_access_key_id
-  * aws_secret_access_key
-  * region
-  * queue_url
+  *   clientId
+  *   brokers
+  *   groupId
 
-  2. Run Consumer
+  2. edit consumer.ts to add topic name
+
+  3. Run Consumer
   ```bash
   yarn consumer
   ```
-
-## Example Code Snippet (Producer)
-  ### Simple Example for Standard Queue
-  ```js
-  const exampleProducerFunctionForStandardQueue = async () => {
-    const producer = Producer.create({
-    queueUrl: config.queueUrl,
-    region: config.region
-  });
-
-  // send simple messages to the queue
-  await producer.send(['msg1', 'msg2']);
-  }
-  ```
-
-  ### Example for FIFO Queue
-  ```js
-  const exampleProducerFunctionForFIFOQueue = async () => {
-  const producer = Producer.create({
-    queueUrl: config.queueUrl,
-    region: config.region
-  });
-  await producer.send({
-    id: "testId",
-    body: 'Hello world from our FIFO queue!' + new Date().toISOString(),
-    groupId: 'group1234',
-    // generate md5 hash of body (for deduplication)
-    deduplicationId: crypto.createHash('md5').update(body).digest('hex')  
-  });
-  }
-  ```
-## Example (Consumer)
 
   ```js
 const app = Consumer.create({
