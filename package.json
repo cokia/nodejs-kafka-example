@@ -14,5 +14,6 @@
   "scripts": {
     "producer": "ts-node producer.ts",
     "consumer": "ts-node consumer.ts"
-  }
+  },
+  "packageManager": "yarn@3.6.1"
 }
